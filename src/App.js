@@ -10,6 +10,7 @@ import {
 import SpotifyWebApi from 'spotify-web-api-node';
 import { Button } from '@material-ui/core';
 import PlaylistBox from './components/PlaylistBox';
+import NavBar from './components/NavBar';
 
 
 export default class App extends Component {
@@ -64,6 +65,7 @@ export default class App extends Component {
   render() {
     return (
       <div className="App">
+        <NavBar titleText="Spotify Playlist Namer"/>
         {this.spotifyLoginLink()}
         {(this.state.token !== null) ? (
           <PlaylistBox getMe={this.getMe} 

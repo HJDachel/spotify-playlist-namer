@@ -21,7 +21,7 @@ export default class PlaylistBox extends Component {
     }
     
     getUserPlaylists = () => {
-        this.props.spotifyAPI.getUserPlaylists(this.state.currentUserID)
+        this.props.spotifyAPI.getUserPlaylists(this.state.currentUserID, {limit: 50})
           .then(data => {
             this.setState({userPlaylists: data.body.items})
           })
@@ -33,8 +33,8 @@ export default class PlaylistBox extends Component {
             <div>
                 {(this.state.userPlaylists) ? 
                 (<List>
-                    {this.state.userPlaylists.map( (obj) => {
-                        return (<PlaylistListItem playlist={obj}></PlaylistListItem>)
+                    {this.state.userPlaylists.map( (obj, index) => {
+                        return (<PlaylistListItem playlist={obj} index={index}></PlaylistListItem>)
                     })}
                 </List>) : null
                 }
