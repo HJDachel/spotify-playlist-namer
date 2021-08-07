@@ -1,18 +1,50 @@
-import { Avatar, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
-import React, { Component } from 'react'
+import React from 'react'
+import {
+    Avatar,
+    ListItem,
+    ListItemAvatar, 
+    ListItemIcon, 
+    ListItemText, 
+    Collapse, 
+    List
+} from '@material-ui/core'
+import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import PlaylistDetails from './PlaylistDetails';
 
-export default class PlaylistListItem extends Component {
-    render() {
-        return (
-            <ListItem key={this.props.index} button>
+export default function PlaylistListItem(props) {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClick = () => {
+        setOpen(!open);
+    };
+
+    return (
+        <>
+            <ListItem key={props.index} button onClick={handleClick} >
                 <ListItemAvatar>
                     <Avatar
                         alt="Playlist Photo"
-                        src={this.props.playlist.images[0].url}
+                        src={props.playlist.images[0].url}
                     />
                 </ListItemAvatar>
-                <ListItemText>{this.props.playlist.name}</ListItemText>
+                <ListItemText primary={props.playlist.name} ></ListItemText>
+                {(props.playlist.collaborative) ? (
+                    <ListItemIcon>
+                        <SupervisorAccountOutlinedIcon />
+                    </ListItemIcon>
+                ) : ""}
+                {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-        )
-    }
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                    <ListItem button >
+                        <PlaylistDetails playlist={props.playlist}/>
+                    </ListItem>
+                </List>
+            </Collapse>
+        </>
+    )
 }
+

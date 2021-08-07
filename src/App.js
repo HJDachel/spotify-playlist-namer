@@ -8,7 +8,7 @@ import {
   scopes
 } from './config';
 import SpotifyWebApi from 'spotify-web-api-node';
-import { Button } from '@material-ui/core';
+import { Button, Box } from '@material-ui/core';
 import PlaylistBox from './components/PlaylistBox';
 import NavBar from './components/NavBar';
 
@@ -40,14 +40,13 @@ export default class App extends Component {
     return (
       <>
         {!this.state.token && (
-          <a
-            className="btn btn-outline-primary"
+          <Button variant="contained" color="primary"
             href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
               "%20"
             )}&response_type=token&show_dialog=true`}
           >
             Login to Spotify
-          </a>
+          </Button>
         )
         }
       </>
@@ -66,13 +65,16 @@ export default class App extends Component {
     return (
       <div className="App">
         <NavBar titleText="Spotify Playlist Namer"/>
-        {this.spotifyLoginLink()}
-        {(this.state.token !== null) ? (
-          <PlaylistBox getMe={this.getMe} 
-            userID={this.state.currentUserID}
-            spotifyAPI={this.state.spotifyAPI}/>
-        )
-          : null}
+        <Box p={2}>
+          {this.spotifyLoginLink()}
+          {(this.state.token !== null) ? (
+            <PlaylistBox getMe={this.getMe}
+              userID={this.state.currentUserID}
+              spotifyAPI={this.state.spotifyAPI} />
+          )
+            : null}
+        </Box>
+        
       </div>
     )
   }
