@@ -40,7 +40,7 @@ export default function PlaylistListItem(props) {
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     <ListItem button >
-                        <PlaylistDetails playlist={props.playlist}/>
+                        <PlaylistDetails playlist={props.playlist} setPlaylistName={props.setPlaylistName} api={props.api}/>
                     </ListItem>
                 </List>
             </Collapse>
