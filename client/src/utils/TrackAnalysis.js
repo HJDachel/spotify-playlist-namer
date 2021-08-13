@@ -1,3 +1,4 @@
+import axios from 'axios';
 
 const getPlaylistTracks = (api, playlistID, callback) => {
     api.getPlaylistTracks(playlistID, {
@@ -9,7 +10,6 @@ const getPlaylistTracks = (api, playlistID, callback) => {
 }
 
 const getIDs = (items) => {
-    //console.log(items)
     let arr = [];
     items.map((item) => {
         arr = [...arr, item.track.id]
@@ -19,8 +19,13 @@ const getIDs = (items) => {
 }
 
 export const getFeatures = (api, playlistID) => {
-    getPlaylistTracks(api, playlistID, (tracks) => {
+    const features = getPlaylistTracks(api, playlistID, (tracks) => {
         api.getAudioFeaturesForTracks(tracks)
-            .then(data => console.log(data.body));
+            .then( (data) => {
+                axios.post('http://localhost:5000/name', data.body)
+                    .then(response => console.log(response));
+            });
     });
+
+    
 }
