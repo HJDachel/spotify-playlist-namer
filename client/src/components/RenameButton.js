@@ -10,6 +10,7 @@ import { getFeatures } from '../utils/TrackAnalysis';
 export default function RenameButton(props) {
     const [open, setOpen] = React.useState(false);
     const [name, setName] = React.useState("");
+    const [generatedName, setGeneratedName] = React.useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -25,7 +26,7 @@ export default function RenameButton(props) {
     }
 
     const generateName = () => {
-        getFeatures(props.api, props.playlist.id);
+        getFeatures(props.api, props.playlist.id, setGeneratedName);
     }
 
     return (
@@ -41,7 +42,8 @@ export default function RenameButton(props) {
             >
                 <DialogTitle id="alert-dialog-title">{`Generate a new name for ${props.playlist.name}`}</DialogTitle>
                 <DialogContent>
-                    <TextField label="New Name" variant="outlined" onChange={(e) => setName(e.target.value)}/>
+                    {/* <TextField label="Custom Name" variant="outlined" onChange={(e) => setName(e.target.value)}/> */}
+                    <TextField variant="outlined" value={generatedName}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={generateName} color="primary">

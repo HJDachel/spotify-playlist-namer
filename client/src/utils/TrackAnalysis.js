@@ -6,6 +6,7 @@ const getPlaylistTracks = (api, playlistID, callback) => {
         fields: 'items(track(id))'
     })
         .then((data) => callback(getIDs(data.body.items)))
+        .then(names => names)
         .catch((err) => console.error(err));
 }
 
@@ -18,12 +19,12 @@ const getIDs = (items) => {
     return arr;
 }
 
-export const getFeatures = (api, playlistID) => {
-    const features = getPlaylistTracks(api, playlistID, (tracks) => {
+export const getFeatures = (api, playlistID, callback) => {
+    getPlaylistTracks(api, playlistID, (tracks) => {
         api.getAudioFeaturesForTracks(tracks)
             .then( (data) => {
                 axios.post('http://localhost:5000/name', data.body)
-                    .then(response => console.log(response));
+                    .then(response => callback(response.data.name.join(' ')));
             });
     });
 
