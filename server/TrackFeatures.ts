@@ -1,13 +1,19 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { Track, Average, Ranges } from './types';
 import { spotifyRanges, wordsRanges } from './Ranges';
+import { words } from './words';
 const lc = require('linear-converter-to-go');
 
 
 export const generateName = (request: Request, response: Response, next: NextFunction): void => {
     let average : Average = getAverages(request.body.audio_features);
     let scaledAverage : Average = scaleAverage(spotifyRanges, wordsRanges, average);
-    response.json(scaledAverage);
+    
+    const res = {
+        name: selectWords(scaledAverage, 2),
+        average: scaledAverage
+    };
+    response.json(res);
 };
 
 const getAverages = (tracks: Track[]): Average => {
@@ -40,4 +46,16 @@ const scaleAverage = (oldRanges: Ranges, newRanges: Ranges,
 
         };
         return scaledAverage;
+}
+
+const selectWords = (scaledAverage: Average, numberOfWords: number): Array<string> => {
+    const possibleWords= words.filter((word) => {
+        return parseFloat(word.ValenceMean) >= (scaledAverage.valence - .03) && parseFloat(word.ValenceMean) <= (scaledAverage.valence + .03)
+    });
+    const firstWord = possibleWords[Math.floor(Math.random()*possibleWords.length)];
+    let secondWord = possibleWords[Math.floor(Math.random()*possibleWords.length)];
+    while (secondWord === null  || secondWord === firstWord) {
+        secondWord = possibleWords[Math.floor(Math.random()*possibleWords.length)];
+    }
+    return [firstWord.Description, secondWord.Description];
 }
