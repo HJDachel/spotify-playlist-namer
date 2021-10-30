@@ -22,7 +22,9 @@ export default function RenameButton(props) {
 
     const handleRename = () => {
         handleClose();
-        props.setPlaylistName(props.playlist.id, name);
+        if (generatedName !== null) {
+            props.setPlaylistName(props.playlist.id, generatedName);
+        }
     }
 
     const generateName = () => {
@@ -43,7 +45,7 @@ export default function RenameButton(props) {
                 <DialogTitle id="alert-dialog-title">{`Generate a new name for ${props.playlist.name}`}</DialogTitle>
                 <DialogContent>
                     {/* <TextField label="Custom Name" variant="outlined" onChange={(e) => setName(e.target.value)}/> */}
-                    <TextField variant="outlined" value={generatedName}/>
+                    <TextField variant="outlined" value={generatedName} onChange={(e) => setGeneratedName(e.target.value)}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={generateName} color="primary">
